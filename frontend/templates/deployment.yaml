@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: expense
+  labels:
+    app: frontend
+    tier: frontend
+    purpose: expense
+spec: #replica set
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+      tier: frontend
+      purpose: expense
+  template:  #pod template
+    metadata:
+      labels:
+        app: frontend
+        tier: frontend
+        purpose: expense
+    spec:
+      containers:
+      - name: nginx
+        image: rushhav717/frontend:{{ .Values.deployment.imageversion }}
+        resources:  
+          requests:  #soft limit
+            memory: "68Mi"
+            cpu: "100m"
+          limits:   #hard limit
+            memory: "128Mi"
+            cpu: "150m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf 
+          readOnly: true
+      volumes:
+      - name: nginx
+        configMap:
+          name: nginx
+          items:
+          - key: nginx.conf
+            path: nginx.conf
