@@ -1,4 +1,4 @@
 deployment:
-  imageversion: 1.0.0
+  imageversion: 1.2.0
 hpa:
   averageUtilization: 5
