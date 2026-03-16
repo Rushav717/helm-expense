@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: expense
+  labels:
+    app: backend
+    tier: backend
+    purpose: expense
+spec: #replica set
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      tier: backend
+      purpose: expense
+  template:  #pod template
+    metadata:
+      labels:
+        app: backend
+        tier: backend
+        purpose: expense
+    spec:
+      containers:
+      - name: nginx
+        image: rushhav717/backend:{{ .Values.deployment.imageversion }}
+        envFrom: #attaching the configmap file so that pod can refer
+          - configMapRef:
+              name: backend 
